@@ -9,35 +9,35 @@
 import Foundation
 
 public struct LGMesurement {
-    public static let lg_isPhone: Bool = {
+    public static let isPhone: Bool = {
         return UIDevice.current.userInterfaceIdiom == .phone
     }()
     
-    public static let lg_isPad: Bool = {
+    public static let isPad: Bool = {
         return UIDevice.current.userInterfaceIdiom == .pad
     }()
 
-    public static let lg_statusBarHeight: CGFloat = {
+    public static let statusBarHeight: CGFloat = {
         return UIApplication.shared.statusBarFrame.height
     }()
     
-    public static let lg_screenWidth: CGFloat = {
+    public static let screenWidth: CGFloat = {
         return UIScreen.main.bounds.width
     }()
     
-    public static let lg_screenHeight: CGFloat = {
+    public static let screenHeight: CGFloat = {
         return UIScreen.main.bounds.height
     }()
     
-    public static let lg_screenScale: CGFloat = {
+    public static let screenScale: CGFloat = {
         return UIScreen.main.scale
     }()
     
     public static let screenRatio: CGFloat = {
-        return lg_screenWidth / lg_screenHeight
+        return screenWidth / screenHeight
     }()
     
-    public static let lg_isPhoneX: Bool = {
-        return lg_isPhone && UIScreen.main.nativeBounds.height == 2436
+    public static let isPhoneX: Bool = {
+        return isPhone && UIScreen.main.nativeBounds.height == 2436
     }()
 }

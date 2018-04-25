@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FEBFD83020901E92003A35D3 /* LGAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD82F20901E92003A35D3 /* LGAnimator.swift */; };
+		FEBFD83320901F37003A35D3 /* UIApplication+LGPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD83220901F37003A35D3 /* UIApplication+LGPhotoBrowser.swift */; };
+		FEBFD835209034AF003A35D3 /* LGActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD834209034AF003A35D3 /* LGActionView.swift */; };
+		FEBFD8372090363F003A35D3 /* LGButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD8362090363F003A35D3 /* LGButtons.swift */; };
+		FEBFD83920905A81003A35D3 /* LGPagingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD83820905A81003A35D3 /* LGPagingScrollView.swift */; };
+		FEBFD84020906DFF003A35D3 /* UIView+cornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFD83F20906DFF003A35D3 /* UIView+cornerRadius.swift */; };
 		FEEB2C97208F2F1700EA2EB3 /* LGPhotoBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = FEEB2C95208F2F1700EA2EB3 /* LGPhotoBrowser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FEEB2C9E208F2F7400EA2EB3 /* LGPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEEB2C9D208F2F7400EA2EB3 /* LGPhoto.swift */; };
 		FEEB2CAE208F34A800EA2EB3 /* LGHTTPRequest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEEB2CAD208F34A800EA2EB3 /* LGHTTPRequest.framework */; };
@@ -33,6 +39,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FEBFD82F20901E92003A35D3 /* LGAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGAnimator.swift; sourceTree = "<group>"; };
+		FEBFD83220901F37003A35D3 /* UIApplication+LGPhotoBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+LGPhotoBrowser.swift"; sourceTree = "<group>"; };
+		FEBFD834209034AF003A35D3 /* LGActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGActionView.swift; sourceTree = "<group>"; };
+		FEBFD8362090363F003A35D3 /* LGButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGButtons.swift; sourceTree = "<group>"; };
+		FEBFD83820905A81003A35D3 /* LGPagingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LGPagingScrollView.swift; sourceTree = "<group>"; };
+		FEBFD83F20906DFF003A35D3 /* UIView+cornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+cornerRadius.swift"; sourceTree = "<group>"; };
 		FEEB2C92208F2F1700EA2EB3 /* LGPhotoBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LGPhotoBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEEB2C95208F2F1700EA2EB3 /* LGPhotoBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGPhotoBrowser.h; sourceTree = "<group>"; };
 		FEEB2C96208F2F1700EA2EB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -94,6 +106,12 @@
 				FEEB2CBD208F4A4700EA2EB3 /* LGZoomingScrollView.swift */,
 				FEEB2CC1208F539900EA2EB3 /* LGCircleProgressView.swift */,
 				FEEB2CBF208F4F7500EA2EB3 /* LGMesurement.swift */,
+				FEBFD82F20901E92003A35D3 /* LGAnimator.swift */,
+				FEBFD834209034AF003A35D3 /* LGActionView.swift */,
+				FEBFD8362090363F003A35D3 /* LGButtons.swift */,
+				FEBFD83820905A81003A35D3 /* LGPagingScrollView.swift */,
+				FEBFD83220901F37003A35D3 /* UIApplication+LGPhotoBrowser.swift */,
+				FEBFD83F20906DFF003A35D3 /* UIView+cornerRadius.swift */,
 				FEEB2C96208F2F1700EA2EB3 /* Info.plist */,
 				FEEB2CC3208F57E800EA2EB3 /* Images.xcassets */,
 			);
@@ -212,14 +230,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEBFD83320901F37003A35D3 /* UIApplication+LGPhotoBrowser.swift in Sources */,
+				FEBFD835209034AF003A35D3 /* LGActionView.swift in Sources */,
 				FEEB2C9E208F2F7400EA2EB3 /* LGPhoto.swift in Sources */,
 				FEEB2CB6208F3C3F00EA2EB3 /* LGPhotoBrowser.swift in Sources */,
+				FEBFD84020906DFF003A35D3 /* UIView+cornerRadius.swift in Sources */,
 				FEEB2CC0208F4F7600EA2EB3 /* LGMesurement.swift in Sources */,
 				FEEB2CBE208F4A4700EA2EB3 /* LGZoomingScrollView.swift in Sources */,
 				FEEB2CBA208F440F00EA2EB3 /* LGTapDetectingView.swift in Sources */,
+				FEBFD83020901E92003A35D3 /* LGAnimator.swift in Sources */,
 				FEEB2CB2208F366C00EA2EB3 /* LGPhotoBrowserDefines.swift in Sources */,
+				FEBFD8372090363F003A35D3 /* LGButtons.swift in Sources */,
 				FEEB2CC2208F539900EA2EB3 /* LGCircleProgressView.swift in Sources */,
 				FEEB2CB8208F3C4E00EA2EB3 /* LGPhotoBrowserDelegate.swift in Sources */,
+				FEBFD83920905A81003A35D3 /* LGPagingScrollView.swift in Sources */,
 				FEEB2CBC208F472200EA2EB3 /* LGTapDetectingImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -360,6 +384,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LGPhotoBrowser/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -387,6 +412,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = LGPhotoBrowser/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

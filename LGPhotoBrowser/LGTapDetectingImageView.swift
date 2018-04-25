@@ -39,22 +39,20 @@ open class LGTapDetectingImageView: LGAnimatedImageView {
     }
     
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else {
-            return
-        }
-        
-        switch touch.tapCount {
-        case 1:
-            detectingDelegate?.singleTapDetected(touch, targetView: self)
-            break
-        case 2:
-            detectingDelegate?.doubleTapDetected(touch, targetView: self)
-            break
-        case 3:
-            detectingDelegate?.tripleTapDetected(touch, targetView: self)
-            break
-        default:
-            break
+        if let touch = touches.first {
+            switch touch.tapCount {
+            case 1:
+                detectingDelegate?.singleTapDetected(touch, targetView: self)
+                break
+            case 2:
+                detectingDelegate?.doubleTapDetected(touch, targetView: self)
+                break
+            case 3:
+                detectingDelegate?.tripleTapDetected(touch, targetView: self)
+                break
+            default:
+                break
+            }
         }
         self.next?.touchesEnded(touches, with: event)
     }

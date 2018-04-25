@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import LGWebImage
 
 open class LGZoomingScrollView: UIScrollView {
-    var photo: LGPhotoProtocol! {
+    var photo: LGPhotoProtocol? {
         didSet {
-            
+            layoutImageIfNeeded()
         }
     }
     
@@ -53,7 +54,9 @@ open class LGZoomingScrollView: UIScrollView {
         
         progressView = LGCircleProgressView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         progressView.clockwise = true
-        progressView.trackImage = UIImage(named: "progress")
+        progressView.trackImage = UIImage(named: "ic_progress",
+                                          in: Bundle(for: LGPhotoBrowser.self),
+                                          compatibleWith: nil)
         progressView.trackFillColor = UIColor.white
         addSubview(progressView)
         
@@ -67,6 +70,39 @@ open class LGZoomingScrollView: UIScrollView {
                                  .flexibleBottomMargin,
                                  .flexibleRightMargin,
                                  .flexibleLeftMargin]
+    }
+    
+    func layoutImageIfNeeded() {
+        guard let photo = self.photo else {
+            self.imageView.image = nil
+            return
+        }
+        if photo.isVideo {
+            
+        } else {
+            do {
+                let photoURL = try photo.photoURL.asURL()
+                if photoURL.isFileURL {
+                    DispatchQueue.utility.async {
+                        do {
+                            let data = try Data(contentsOf: photoURL)
+                            let image = LGImage.imageWith(data: data)
+                            DispatchQueue.main.async {
+                                self.imageView.image = image
+                            }
+                        } catch {
+                            
+                        }
+                    }
+                } else {
+                   imageView.lg_setImageWithURL(photoURL,
+                                                placeholder: photo.underlyingImage)
+                }
+                
+            } catch {
+                
+            }
+        }
     }
     
     open override func layoutSubviews() {
@@ -119,7 +155,7 @@ open class LGZoomingScrollView: UIScrollView {
         // height in pixels. scale needs to remove if to use the old algorithm
         let deviceScreenHeight = UIScreen.main.bounds.height * scale
         
-        if LGPhotoBrowserOptions.longPhotoWidthMatchScreen &&
+        if LGPhotoBrowserOptions.current.contains(.longPhotoWidthMatchScreen) &&
             imageView.frame.height >= imageView.frame.width
         {
             minScale = 1.0
@@ -151,6 +187,9 @@ open class LGZoomingScrollView: UIScrollView {
     
     // MARK: - image
     open func displayImage(complete flag: Bool) {
+        guard let photo = self.photo else {
+            return
+        }
         // reset scale
         self.maximumZoomScale = 1
         self.minimumZoomScale = 1
@@ -173,9 +212,11 @@ open class LGZoomingScrollView: UIScrollView {
             var imageViewFrame: CGRect = .zero
             imageViewFrame.origin = .zero
             // long photo
-            if LGPhotoBrowserOptions.longPhotoWidthMatchScreen && image.size.height >= image.size.width {
-                let imageHeight = LGMesurement.lg_screenWidth / image.size.width * image.size.height
-                imageViewFrame.size = CGSize(width: LGMesurement.lg_screenWidth, height: imageHeight)
+            if LGPhotoBrowserOptions.current.contains(.longPhotoWidthMatchScreen) &&
+                image.size.height >= image.size.width
+            {
+                let imageHeight = LGMesurement.screenWidth / image.size.width * image.size.height
+                imageViewFrame.size = CGSize(width: LGMesurement.screenWidth, height: imageHeight)
             } else {
                 imageViewFrame.size = image.size
             }

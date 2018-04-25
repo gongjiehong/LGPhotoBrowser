@@ -8,12 +8,16 @@
 
 import Foundation
 
+/// 整个生命周期中使用到的通知定义
 public struct LGPBNotifications {
+    
+    /// 进度条通知
     public static let progress: Notification.Name = {
         let name = Notification.Name(rawValue: "kLGPhotoBrowserProgressNotification")
         return name
     }()
     
+    /// 图片下载完成通知
     public static let downloadCompleted: Notification.Name = {
         let name = Notification.Name(rawValue: "kLGPhotoBrowserDownloadCompletedNotification")
         return name
@@ -21,6 +25,13 @@ public struct LGPBNotifications {
 }
 
 
+/// LGPhoto的状态定义
+///
+/// - unknown: 未知
+/// - placeholder: 使用placeholder
+/// - progress: 下载中
+/// - finished: 下载完成
+/// - failed: 下载失败
 public enum LGPhotoLoadStatus {
     case unknown
     case placeholder
@@ -29,28 +40,62 @@ public enum LGPhotoLoadStatus {
     case failed
 }
 
+/// LGPhotoBrowser的状态定义，此状态决定内容的显示状态
+///
+/// - browsing: 纯浏览图片
+/// - rowsingAndEditing: 浏览和编辑，例如修改
 public enum LGPhotoBrowserStatus {
     case browsing
-    case rowsingAndEditing
+    case browsingAndEditing
 }
 
+/// 浏览器设置项定义
 public struct LGPhotoBrowserSettings {
     public static var backgroundColor: UIColor = .black
 }
 
 
+/// 浏览器选项定义
 public struct LGPhotoBrowserOptions: OptionSet {
     public var rawValue: Int
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
+    
+    public static var current: LGPhotoBrowserOptions = .default
+    
+    public static let `default`: LGPhotoBrowserOptions = {
+       return [LGPhotoBrowserOptions.displayStatusbar]
+    }()
+    
     public static let displayStatusbar: LGPhotoBrowserOptions = {
         return LGPhotoBrowserOptions(rawValue: 0)
     }()
     
-//    public static var displayStatusbar: Bool = false
-//    public static var displayCloseButton: Bool = true
-//    public static var displayDeleteButton: Bool = false
+    public static let displayCloseButton: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 1)
+    }()
+    
+    public static let displayDeleteButton: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 2)
+    }()
+    
+    public static let longPhotoWidthMatchScreen: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 3)
+    }()
+    
+    public static let enableBounceAnimation: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 4)
+    }()
+    
+    public static let disableVerticalSwipe: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 5)
+    }()
+    
+    public static let swapCloseAndDeleteButtons: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 6)
+    }()
+
 //    
 //    public static var displayAction: Bool = true
 //    public static var shareExtraCaption: String?
@@ -82,5 +127,10 @@ public struct LGPhotoBrowserOptions: OptionSet {
 //    /// if this value is true, the long photo width will match the screen,
 //    /// and the minScale is 1.0, the maxScale is 2.5
 //    /// Default: false
-    public static var longPhotoWidthMatchScreen: Bool = false
+//    public static var longPhotoWidthMatchScreen: Bool = false
+}
+
+public struct LGButtonOptions {
+    public static var closeButtonPadding: CGPoint = CGPoint(x: 5, y: 20)
+    public static var deleteButtonPadding: CGPoint = CGPoint(x: 5, y: 20)
 }

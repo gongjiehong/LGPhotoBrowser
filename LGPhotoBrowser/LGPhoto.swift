@@ -10,20 +10,21 @@ import Foundation
 import LGHTTPRequest
 import LGWebImage
 
-public protocol LGPhotoProtocol {
+public protocol LGPhotoProtocol: NSObjectProtocol {
     var index: Int { get set }
     var underlyingImage: UIImage? { get }
     var caption: String? { get }
-    var contentMode: UIViewContentMode { get set}
+    var contentMode: UIViewContentMode { get set }
     var isVideo: Bool { get set}
     var isEmptyImage: Bool { get set}
     var photoStatus: LGPhotoLoadStatus {get}
+    var photoURL: LGURLConvertible { get set }
     
     func loadUnderlyingImageAndNotify()
     func checkImage(_ completed: @escaping (Bool) -> Void)
 }
 
-open class LGPhoto: LGPhotoProtocol {
+open class LGPhoto: NSObject, LGPhotoProtocol {
     public var index: Int = 0
     
     public var underlyingImage: UIImage?
@@ -159,3 +160,4 @@ open class LGPhoto: LGPhotoProtocol {
         }
     }
 }
+
