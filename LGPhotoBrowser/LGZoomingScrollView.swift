@@ -26,10 +26,9 @@ open class LGZoomingScrollView: UIScrollView {
         setupDefault()
     }
     
-    convenience init(frame: CGRect, browser: LGPhotoBrowser) {
+    convenience init(frame: CGRect, browser: LGPhotoBrowser? = nil) {
         self.init(frame: frame)
         self.browser = browser
-        setupDefault()
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -44,7 +43,7 @@ open class LGZoomingScrollView: UIScrollView {
         tapView.backgroundColor = .clear
         tapView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         addSubview(tapView)
-        
+
         // image
         imageView = LGTapDetectingImageView(frame: self.bounds)
         imageView.detectingDelegate = self
@@ -54,10 +53,9 @@ open class LGZoomingScrollView: UIScrollView {
         
         progressView = LGCircleProgressView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         progressView.clockwise = true
-        progressView.trackImage = UIImage(named: "ic_progress",
-                                          in: Bundle(for: LGPhotoBrowser.self),
-                                          compatibleWith: nil)
+        progressView.trackWidth = 2.0
         progressView.trackFillColor = UIColor.white
+        progressView.trackBackgroundColor = UIColor.gray.withAlphaComponent(0.3)
         addSubview(progressView)
         
         self.backgroundColor = .clear
@@ -89,16 +87,26 @@ open class LGZoomingScrollView: UIScrollView {
                             let image = LGImage.imageWith(data: data)
                             DispatchQueue.main.async {
                                 self.imageView.image = image
+                                self.displayImage(complete: true)
                             }
                         } catch {
                             
                         }
                     }
                 } else {
-                   imageView.lg_setImageWithURL(photoURL,
-                                                placeholder: photo.underlyingImage)
+                    self.progressView.isHidden = false
+                    imageView.lg_setImageWithURL(photoURL,
+                                                 placeholder: photo.underlyingImage,
+                                                 options: LGWebImageOptions.default,
+                                                 progressBlock:
+                        { (progress) in
+                        self.progressView.progress = progress.fractionCompleted
+                    }, transformBlock: nil) { (resultImage, _, _, imageStage, _) in
+                        self.photo?.underlyingImage = resultImage
+                        self.progressView.isHidden = imageStage == LGWebImageStage.finished
+                        self.displayImage(complete: imageStage == LGWebImageStage.finished)
+                    }
                 }
-                
             } catch {
                 
             }
@@ -108,9 +116,8 @@ open class LGZoomingScrollView: UIScrollView {
     open override func layoutSubviews() {
         super.layoutSubviews()
         self.tapView.frame = self.bounds
-        self.imageView.frame = self.bounds
         
-        let boundsSize = bounds.size
+        let boundsSize = self.bounds.size
         var frameToCenter = imageView.frame
         
         // horizon
@@ -130,6 +137,7 @@ open class LGZoomingScrollView: UIScrollView {
         if !imageView.frame.equalTo(frameToCenter) {
             imageView.frame = frameToCenter
         }
+        self.progressView.center = imageView.center
     }
     
     open func setMaxMinZoomScalesForCurrentBounds() {
@@ -201,10 +209,10 @@ open class LGZoomingScrollView: UIScrollView {
             }
             photo.loadUnderlyingImageAndNotify()
         } else {
-            progressView.isHidden = false
+            progressView.isHidden = true
         }
         
-        if photo != nil, let image = photo.underlyingImage {
+        if let image = photo.underlyingImage {
             // image
             imageView.image = image
             imageView.contentMode = photo.contentMode
@@ -235,6 +243,31 @@ open class LGZoomingScrollView: UIScrollView {
         progressView.isHidden = true
     }
     
+    // MARK: - handle tap
+    open func handleDoubleTap(_ touchPoint: CGPoint) {
+        if let browser = browser {
+            NSObject.cancelPreviousPerformRequests(withTarget: browser)
+        }
+        
+        if zoomScale > minimumZoomScale {
+            // zoom out
+            setZoomScale(minimumZoomScale, animated: true)
+        } else {
+            // zoom in
+            // I think that the result should be the same after double touch or pinch
+            /* var newZoom: CGFloat = zoomScale * 3.13
+             if newZoom >= maximumZoomScale {
+             newZoom = maximumZoomScale
+             }
+             */
+            let zoomRect = zoomRectForScrollViewWith(maximumZoomScale, touchPoint: touchPoint)
+            zoom(to: zoomRect, animated: true)
+        }
+        
+        // delay control
+        browser?.hideControlsAfterDelay()
+    }
+    
     deinit {
         browser = nil
     }
@@ -242,29 +275,58 @@ open class LGZoomingScrollView: UIScrollView {
 
 extension LGZoomingScrollView: LGTapDetectingImageViewDelegate {
     public func singleTapDetected(_ touch: UITouch, targetView: UIImageView) {
+        guard let browser = browser else {
+            return
+        }
         
+        if browser.status == LGPhotoBrowserStatus.browsing {
+            browser.perform(#selector(LGPhotoBrowser.determineAndClose),
+                            with: nil,
+                            afterDelay: 0.2)
+        } else {
+            browser.perform(#selector(LGPhotoBrowser.toggleControls),
+                            with: nil,
+                            afterDelay: 0.2)
+        }
     }
     
     public func doubleTapDetected(_ touch: UITouch, targetView: UIImageView) {
-        
-    }
-    
-    public func tripleTapDetected(_ touch: UITouch, targetView: UIImageView) {
-        
+        if let browser = self.browser {
+            NSObject.cancelPreviousPerformRequests(withTarget: browser)
+        }
+        let touchPoint = touch.location(in: targetView)
+        handleDoubleTap(touchPoint)
     }
 }
 
 extension LGZoomingScrollView: LGTapDetectingViewDelegate {
     public func singleTapDetected(_ touch: UITouch, targetView: UIView) {
+        guard let browser = browser else {
+            return
+        }
+        guard LGPhotoBrowserOptions.current.contains(.enableZoomBlackArea) else {
+            return
+        }
         
+        if browser.areControlsHidden() == false && browser.status == LGPhotoBrowserStatus.browsing {
+            browser.perform(#selector(LGPhotoBrowser.determineAndClose),
+                            with: nil,
+                            afterDelay: 0.2)
+        } else {
+            browser.perform(#selector(LGPhotoBrowser.toggleControls),
+                            with: nil,
+                            afterDelay: 0.2)
+        }
     }
     
     public func doubleTapDetected(_ touch: UITouch, targetView: UIView) {
-        
-    }
-    
-    public func tripleTapDetected(_ touch: UITouch, targetView: UIView) {
-        
+        if let browser = self.browser {
+            NSObject.cancelPreviousPerformRequests(withTarget: browser)
+        }
+        if LGPhotoBrowserOptions.current.contains(.enableZoomBlackArea) {
+            let needPoint = getViewFramePercent(targetView, touch: touch)
+            handleDoubleTap(needPoint)
+        }
     }
 }
 
@@ -280,5 +342,36 @@ extension LGZoomingScrollView: UIScrollViewDelegate {
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
         self.setNeedsLayout()
         self.layoutIfNeeded()
+    }
+}
+
+private extension LGZoomingScrollView {
+    func getViewFramePercent(_ view: UIView, touch: UITouch) -> CGPoint {
+        let oneWidthViewPercent = view.bounds.width / 100
+        let viewTouchPoint = touch.location(in: view)
+        let viewWidthTouch = viewTouchPoint.x
+        let viewPercentTouch = viewWidthTouch / oneWidthViewPercent
+        let photoWidth = imageView.bounds.width
+        let onePhotoPercent = photoWidth / 100
+        let needPoint = viewPercentTouch * onePhotoPercent
+        
+        var Y: CGFloat!
+        
+        if viewTouchPoint.y < view.bounds.height / 2 {
+            Y = 0
+        } else {
+            Y = imageView.bounds.height
+        }
+        let allPoint = CGPoint(x: needPoint, y: Y)
+        return allPoint
+    }
+    
+    func zoomRectForScrollViewWith(_ scale: CGFloat, touchPoint: CGPoint) -> CGRect {
+        let w = frame.size.width / scale
+        let h = frame.size.height / scale
+        let x = touchPoint.x - (h / max(UIScreen.main.scale, 2.0))
+        let y = touchPoint.y - (w / max(UIScreen.main.scale, 2.0))
+        
+        return CGRect(x: x, y: y, width: w, height: h)
     }
 }

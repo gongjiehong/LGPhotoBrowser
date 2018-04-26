@@ -17,7 +17,7 @@ open class LGPhotoBrowser: UIViewController {
     fileprivate let bgColor: UIColor = LGPhotoBrowserSettings.backgroundColor
     fileprivate let animator: LGAnimator = LGAnimator()
     
-    fileprivate var status: LGPhotoBrowserStatus = LGPhotoBrowserStatus.browsing
+    var status: LGPhotoBrowserStatus = LGPhotoBrowserStatus.browsingAndEditing
     
     fileprivate var actionView: LGActionView!
     fileprivate lazy var pageControl: UIPageControl = {
@@ -93,11 +93,48 @@ open class LGPhotoBrowser: UIViewController {
         self.configureGestureControl()
         self.configureActionView()
         self.configurePageControl()
+        animator.willPresent(self)
+    }
+    
+    override open func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadData()
+        
+        var i = 0
+        for photo: LGPhotoProtocol in photos {
+            photo.index = i
+            i += 1
+        }
+    }
+    
+    override open func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        isPerformingLayout = true
+        // where did start
+        delegate?.didShowPhotoAtIndex?(self, index: currentPageIndex)
+        
+        // action
+        actionView.updateFrame(frame: view.frame)
+        
+        pagingScrollView.updateFrame(view.bounds, currentPageIndex: currentPageIndex)
+        
+        isPerformingLayout = false
+    }
+    
+    override open func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        isViewActive = true
     }
     
     // MARK: -  notifications
     @objc func photoDownloadCompleted(_ noti: Notification) {
-        
+//        guard let photo = notification.object as? SKPhotoProtocol else {
+//            return
+//        }
+//        guard let page = self.pagingScrollView.pageDisplayingAtPhoto(photo), let photo = page.photo else {
+//            return
+//        }
+//        self.loadAdjacentPhotosIfNecessary(photo)
     }
     
     @objc func photoDownloadProgressCallBack(_ noti: Notification) {
@@ -111,7 +148,7 @@ open class LGPhotoBrowser: UIViewController {
     }
    
     override open var prefersStatusBarHidden: Bool {
-        return LGPhotoBrowserOptions.current.contains(.displayStatusbar)
+        return !LGPhotoBrowserOptions.current.contains(.displayStatusbar)
     }
     
     // MARK: - initialize / setup
@@ -152,7 +189,7 @@ open class LGPhotoBrowser: UIViewController {
         }
     }
     
-    open func determineAndClose() {
+    @objc open func determineAndClose() {
         delegate?.willDismissAtPageIndex?(self.currentPageIndex)
         animator.willDismiss(self)
     }
@@ -240,7 +277,7 @@ public extension LGPhotoBrowser {
         delegate?.controlsVisibilityToggled?(self, hidden: true)
     }
     
-    func toggleControls() {
+    @objc func toggleControls() {
         let hidden = !areControlsHidden()
         setControlsHidden(hidden, animated: true, permanent: false)
         delegate?.controlsVisibilityToggled?(self, hidden: areControlsHidden())
@@ -445,7 +482,7 @@ extension LGPhotoBrowser {
         }
     }
     
-    func deleteImage() {
+    @objc func deleteImage() {
         defer {
             reloadData()
         }

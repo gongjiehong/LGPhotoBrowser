@@ -12,7 +12,7 @@ import LGWebImage
 
 public protocol LGPhotoProtocol: NSObjectProtocol {
     var index: Int { get set }
-    var underlyingImage: UIImage? { get }
+    var underlyingImage: UIImage? { get set }
     var caption: String? { get }
     var contentMode: UIViewContentMode { get set }
     var isVideo: Bool { get set}

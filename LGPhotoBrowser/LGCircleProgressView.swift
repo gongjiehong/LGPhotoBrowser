@@ -67,7 +67,7 @@ open class LGCircleProgressView: UIView {
         didSet { setNeedsDisplay() }
     }
     
-     open var centerFillColor: UIColor = UIColor.white {
+     open var centerFillColor: UIColor = UIColor.clear {
         didSet { setNeedsDisplay() }
     }
     

@@ -41,7 +41,9 @@ class SecondViewController: UIViewController {
         
         var resultArray: [LGPhotoProtocol] = [LGPhotoProtocol]()
         dataArray.forEach({resultArray.append(LGPhoto(photoURL: $0))})
-        let browser = LGPhotoBrowser(photos: resultArray)
+        let browser = LGPhotoBrowser(photos: resultArray,
+                                     initialPageIndex: 0,
+                                     status: LGPhotoBrowserStatus.browsing)
         self.present(browser, animated: true) {
             
         }

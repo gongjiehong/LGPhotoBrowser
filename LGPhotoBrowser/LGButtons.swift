@@ -107,9 +107,9 @@ class LGDeleteButton: LGImageButton {
             let swapCloseAndDeleteButtons = LGPhotoBrowserOptions.current.contains(.swapCloseAndDeleteButtons)
             var result: CGFloat
             if swapCloseAndDeleteButtons {
-                result = LGMesurement.screenWidth - LGButtonOptions.deleteButtonPadding.x - self.size.width
-            } else {
                 result = LGButtonOptions.deleteButtonPadding.x
+            } else {
+                result = LGMesurement.screenWidth - LGButtonOptions.deleteButtonPadding.x - self.size.width
             }
             return result
         }

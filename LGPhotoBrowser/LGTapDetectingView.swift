@@ -11,7 +11,6 @@ import Foundation
 public protocol LGTapDetectingViewDelegate: NSObjectProtocol {
     func singleTapDetected(_ touch: UITouch, targetView: UIView)
     func doubleTapDetected(_ touch: UITouch, targetView: UIView)
-    func tripleTapDetected(_ touch: UITouch, targetView: UIView)
 }
 
 open class LGTapDetectingView: UIView {
@@ -25,9 +24,6 @@ open class LGTapDetectingView: UIView {
                 break
             case 2:
                 detectingDelegate?.doubleTapDetected(touch, targetView: self)
-                break
-            case 3:
-                detectingDelegate?.tripleTapDetected(touch, targetView: self)
                 break
             default:
                 break

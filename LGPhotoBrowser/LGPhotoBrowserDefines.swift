@@ -65,36 +65,46 @@ public struct LGPhotoBrowserOptions: OptionSet {
     public static var current: LGPhotoBrowserOptions = .default
     
     public static let `default`: LGPhotoBrowserOptions = {
-       return [LGPhotoBrowserOptions.displayStatusbar]
+       return [.displayStatusbar,
+               .displayCloseButton,
+               .displayDeleteButton,
+               .longPhotoWidthMatchScreen,
+               .enableBounceAnimation]
     }()
     
     public static let displayStatusbar: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 0)
+        return LGPhotoBrowserOptions(rawValue: 1 << 0)
     }()
     
     public static let displayCloseButton: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 1)
+        return LGPhotoBrowserOptions(rawValue: 1 << 1)
     }()
     
     public static let displayDeleteButton: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 2)
+        return LGPhotoBrowserOptions(rawValue: 1 << 2)
     }()
     
     public static let longPhotoWidthMatchScreen: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 3)
+        return LGPhotoBrowserOptions(rawValue: 1 << 3)
     }()
     
     public static let enableBounceAnimation: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 4)
+        return LGPhotoBrowserOptions(rawValue: 1 << 4)
     }()
     
     public static let disableVerticalSwipe: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 5)
+        return LGPhotoBrowserOptions(rawValue: 1 << 5)
     }()
     
     public static let swapCloseAndDeleteButtons: LGPhotoBrowserOptions = {
-        return LGPhotoBrowserOptions(rawValue: 6)
+        return LGPhotoBrowserOptions(rawValue: 1 << 6)
     }()
+    
+    public static let enableZoomBlackArea: LGPhotoBrowserOptions = {
+        return LGPhotoBrowserOptions(rawValue: 1 << 7)
+    }()
+    
+    
 
 //    
 //    public static var displayAction: Bool = true

@@ -12,7 +12,6 @@ import LGWebImage
 public protocol LGTapDetectingImageViewDelegate: NSObjectProtocol {
     func singleTapDetected(_ touch: UITouch, targetView: UIImageView)
     func doubleTapDetected(_ touch: UITouch, targetView: UIImageView)
-    func tripleTapDetected(_ touch: UITouch, targetView: UIImageView)
 }
 
 open class LGTapDetectingImageView: LGAnimatedImageView {
@@ -46,9 +45,6 @@ open class LGTapDetectingImageView: LGAnimatedImageView {
                 break
             case 2:
                 detectingDelegate?.doubleTapDetected(touch, targetView: self)
-                break
-            case 3:
-                detectingDelegate?.tripleTapDetected(touch, targetView: self)
                 break
             default:
                 break

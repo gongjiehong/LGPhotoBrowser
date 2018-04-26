@@ -55,8 +55,12 @@ class LGActionView: UIView {
     func animate(hidden: Bool) {
         let closeFrame: CGRect = hidden ? closeButton.hideFrame : closeButton.showFrame
         let deleteFrame: CGRect = hidden ? deleteButton.hideFrame : deleteButton.showFrame
+        if hidden == false {
+            self.closeButton.isHidden = hidden
+            self.deleteButton.isHidden = hidden
+        }
         UIView.animate(withDuration: 0.35,
-                       animations: { () -> Void in
+                       animations: {
                         let alpha: CGFloat = hidden ? 0.0 : 1.0
                         
                         if LGPhotoBrowserOptions.current.contains(.displayCloseButton) {
@@ -67,7 +71,12 @@ class LGActionView: UIView {
                             self.deleteButton.alpha = alpha
                             self.deleteButton.frame = deleteFrame
                         }
-        }, completion: nil)
+        }) { (finished) in
+            if finished {
+                self.closeButton.isHidden = hidden
+                self.deleteButton.isHidden = hidden
+            }
+        }
     }
     
     @objc func closeButtonPressed(_ sender: UIButton) {
@@ -103,7 +112,7 @@ extension LGActionView {
         if deleteButton == nil {
             deleteButton = LGDeleteButton(frame: .zero)
             deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
-            deleteButton.isHidden = LGPhotoBrowserOptions.current.contains(.displayDeleteButton)
+            deleteButton.isHidden = !LGPhotoBrowserOptions.current.contains(.displayDeleteButton)
             addSubview(deleteButton)
         }
         
