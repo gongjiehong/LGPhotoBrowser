@@ -75,7 +75,10 @@ open class LGZoomingScrollView: UIScrollView {
             self.imageView.image = nil
             return
         }
-        if photo.isVideo {
+        if let image = photo.underlyingImage {
+            self.imageView.image = image
+            self.displayImage(complete: true)
+        } else if photo.isVideo {
             
         } else {
             do {

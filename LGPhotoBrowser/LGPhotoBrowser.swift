@@ -32,6 +32,8 @@ open class LGPhotoBrowser: UIViewController {
     fileprivate var isViewActive: Bool = false
     fileprivate var isPerformingLayout: Bool = false
     
+    public var needAnimation: Bool = true
+    
     
     // pangesture property
     fileprivate var firstX: CGFloat = 0.0
@@ -93,7 +95,9 @@ open class LGPhotoBrowser: UIViewController {
         self.configureGestureControl()
         self.configureActionView()
         self.configurePageControl()
-        animator.willPresent(self)
+        if needAnimation {
+            animator.willPresent(self)
+        }
     }
     
     override open func viewWillAppear(_ animated: Bool) {
@@ -107,15 +111,20 @@ open class LGPhotoBrowser: UIViewController {
         }
     }
     
+    override open func viewDidDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     override open func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        
         isPerformingLayout = true
         // where did start
         delegate?.didShowPhotoAtIndex?(self, index: currentPageIndex)
         
         // action
         actionView.updateFrame(frame: view.frame)
-        
+
         pagingScrollView.updateFrame(view.bounds, currentPageIndex: currentPageIndex)
         
         isPerformingLayout = false
@@ -153,6 +162,17 @@ open class LGPhotoBrowser: UIViewController {
     
     // MARK: - initialize / setup
     open func reloadData() {
+//        self.photos.removeAll()
+//        if let numberOfPhotos = self.dataSource?.numberOfPhotosInPhotoBrowser(self) {
+//            for index in 0..<numberOfPhotos {
+//                if let photo = self.dataSource?.photoBrowser(self, photoAtIndex: index) {
+//                    self.photos.append(photo)
+//                }
+//            }
+//        }
+//
+        self.pageControl.numberOfPages = self.photos.count
+        self.pageControl.currentPage = self.currentPageIndex
         performLayout()
         view.setNeedsLayout()
     }
@@ -305,8 +325,8 @@ public extension LGPhotoBrowser {
 
 // MARK: - Internal Function
 
-internal extension LGPhotoBrowser {
-    func showButtons() {
+extension LGPhotoBrowser {
+    public func showButtons() {
         actionView.animate(hidden: false)
     }
     
@@ -382,7 +402,7 @@ extension LGPhotoBrowser {
     }
     
     func configureActionView() {
-        actionView = LGActionView(frame: view.frame, browser: self)
+        actionView = LGActionView(frame: view.bounds, browser: self)
         view.addSubview(actionView)
     }
     
@@ -397,6 +417,12 @@ extension LGPhotoBrowser {
             self.view.addSubview(pageControl)
             break
         case .browsingAndEditing:
+            self.pageControl.frame = CGRect(x: 0,
+                                            y: self.view.bounds.size.height - 80,
+                                            width: self.view.bounds.size.width,
+                                            height: 30)
+            self.pageControl.isUserInteractionEnabled = false
+            self.view.addSubview(pageControl)
             break
         }
     }
