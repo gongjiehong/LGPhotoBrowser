@@ -67,7 +67,6 @@ public struct LGPhotoBrowserOptions: OptionSet {
     public static let `default`: LGPhotoBrowserOptions = {
        return [.displayStatusbar,
                .displayCloseButton,
-               .displayDeleteButton,
                .longPhotoWidthMatchScreen,
                .enableBounceAnimation]
     }()

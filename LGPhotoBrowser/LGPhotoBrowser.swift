@@ -25,7 +25,7 @@ open class LGPhotoBrowser: UIViewController {
         return pageControl
     }()
     
-    fileprivate var panGesture: UIPanGestureRecognizer?
+    var panGesture: UIPanGestureRecognizer?
     
     // for status check property
     fileprivate var isEndAnimationByToolBar: Bool = true
@@ -70,6 +70,19 @@ open class LGPhotoBrowser: UIViewController {
         animator.senderViewForAnimation = photos[currentPageIndex] as? UIView
         
         self.status = status
+        
+        switch self.status {
+        case .browsing:
+            LGPhotoBrowserOptions.current = LGPhotoBrowserOptions.default
+            break
+        case .browsingAndEditing:
+            LGPhotoBrowserOptions.current =  [.displayStatusbar,
+                                              .displayCloseButton,
+                                              .displayDeleteButton,
+                                              .longPhotoWidthMatchScreen,
+                                              .enableBounceAnimation]
+            break
+        }
     }
     
     // MARK: -  setup defualt

@@ -37,6 +37,7 @@ open class LGZoomingScrollView: UIScrollView {
     }
     
     func setupDefault() {
+            
         // tap
         tapView = LGTapDetectingView(frame: self.bounds)
         tapView.detectingDelegate = self
