@@ -66,10 +66,14 @@ class LGActionView: UIView {
                         if LGPhotoBrowserOptions.current.contains(.displayCloseButton) {
                             self.closeButton.alpha = alpha
                             self.closeButton.frame = closeFrame
+                        } else {
+                            self.closeButton.isHidden = true
                         }
                         if LGPhotoBrowserOptions.current.contains(.displayDeleteButton) {
                             self.deleteButton.alpha = alpha
                             self.deleteButton.frame = deleteFrame
+                        } else {
+                            self.deleteButton.isHidden = true
                         }
         }) { (finished) in
             if finished {
