@@ -58,6 +58,17 @@ class LGActionView: UIView {
         if hidden == false {
             self.closeButton.isHidden = hidden
             self.deleteButton.isHidden = hidden
+            if LGPhotoBrowserOptions.current.contains(.displayCloseButton) {
+                self.closeButton.isHidden = hidden
+            } else {
+                self.closeButton.isHidden = true
+            }
+            
+            if LGPhotoBrowserOptions.current.contains(.displayDeleteButton) {
+                self.deleteButton.isHidden = hidden
+            } else {
+                self.deleteButton.isHidden = true
+            }
         }
         UIView.animate(withDuration: 0.35,
                        animations: {
@@ -77,8 +88,17 @@ class LGActionView: UIView {
                         }
         }) { (finished) in
             if finished {
-                self.closeButton.isHidden = hidden
-                self.deleteButton.isHidden = hidden
+                if LGPhotoBrowserOptions.current.contains(.displayCloseButton) {
+                    self.closeButton.isHidden = hidden
+                } else {
+                    self.closeButton.isHidden = true
+                }
+                
+                if LGPhotoBrowserOptions.current.contains(.displayDeleteButton) {
+                    self.deleteButton.isHidden = hidden
+                } else {
+                    self.deleteButton.isHidden = true
+                }
             }
         }
     }
@@ -101,7 +121,7 @@ extension LGActionView {
         if closeButton == nil {
             closeButton = LGCloseButton(frame: .zero)
             closeButton.addTarget(self, action: #selector(closeButtonPressed(_:)), for: .touchUpInside)
-            closeButton.isHidden = !LGPhotoBrowserOptions.current.contains(.displayCloseButton)
+            closeButton.isHidden = true
             addSubview(closeButton)
         }
         
@@ -116,7 +136,7 @@ extension LGActionView {
         if deleteButton == nil {
             deleteButton = LGDeleteButton(frame: .zero)
             deleteButton.addTarget(self, action: #selector(deleteButtonPressed(_:)), for: .touchUpInside)
-            deleteButton.isHidden = !LGPhotoBrowserOptions.current.contains(.displayDeleteButton)
+            deleteButton.isHidden = true
             addSubview(deleteButton)
         }
         
